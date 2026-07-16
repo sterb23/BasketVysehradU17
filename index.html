@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Oficiální stránky basketbalového týmu Sokol Vyšehrad U17. Novinky, soupiska a zápasy.">
     <title>Sokol Vyšehrad U17 | Oficiální stránky</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Oswald:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* ANIMACE PŘEJÍŽDĚNÍ (SMOOTH SCROLL) */
+        /* ZÁKLAD A ANIMACE PŘEJÍŽDĚNÍ */
         html {
             scroll-behavior: smooth;
         }
@@ -34,7 +35,6 @@
             overflow-x: hidden;
         }
 
-        /* POZADÍ */
         .page-wrapper {
             background: radial-gradient(circle at 50% 0%, #0a1330 0%, #020204 70%);
         }
@@ -42,9 +42,9 @@
         /* NAVIGACE */
         nav {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
+            padding: 15px 40px;
             background: rgba(2, 2, 4, 0.95);
             position: fixed;
             width: 100%;
@@ -54,25 +54,51 @@
             backdrop-filter: blur(10px);
         }
 
-        nav a {
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            margin: 0 auto;
+        }
+
+        .nav-links a {
             color: var(--text-white);
             text-decoration: none;
-            margin: 0 15px;
             font-size: 0.9rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: 0.3s;
-            opacity: 0.7;
+            opacity: 0.6;
+            padding: 5px 10px;
         }
 
-        nav a:hover {
+        .nav-links a:hover, .nav-links a.active {
             opacity: 1;
             color: var(--neon-light);
             text-shadow: 0 0 10px var(--neon-blue);
         }
 
-        /* HEADER (BEZ LOGA) */
+        /* HAMBURGER MENU */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            border: none;
+            background: none;
+            position: absolute;
+            right: 20px;
+            top: 15px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-white);
+            margin: 5px 0;
+            transition: 0.3s;
+        }
+
+        /* HEADER */
         header {
             height: 80vh;
             display: flex;
@@ -81,7 +107,7 @@
             align-items: center;
             text-align: center;
             padding: 20px;
-            position: relative;
+            margin-top: 50px;
         }
 
         h1 {
@@ -104,12 +130,23 @@
             text-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
         }
 
-        /* SEKCE */
+        /* SEKCE & ANIMACE OBJEVEVÁNÍ */
         section {
             padding: 100px 20px;
             max-width: 1100px;
             margin: 0 auto;
             text-align: center;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         h2 {
@@ -130,7 +167,7 @@
             background: var(--neon-blue);
         }
 
-        /* PLACEHOLDERY "JIŽ BRZY" */
+        /* COMING SOON BOX & PULZNÍ EFEKT */
         .coming-soon-box {
             background: var(--bg-card);
             border: 1px dashed var(--neon-blue);
@@ -140,6 +177,7 @@
             font-style: italic;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .coming-soon-box::after {
@@ -152,6 +190,12 @@
             opacity: 0.3;
         }
 
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 210, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0); }
+        }
+
         .status-badge {
             display: inline-block;
             background: rgba(0, 68, 255, 0.1);
@@ -162,6 +206,7 @@
             font-size: 0.8rem;
             margin-bottom: 15px;
             text-transform: uppercase;
+            animation: pulse 2s infinite;
         }
 
         /* O NÁS A ODKAZY */
@@ -200,24 +245,11 @@
             box-shadow: 0 5px 25px rgba(0, 68, 255, 0.4);
         }
 
-        /* Speciální barva pro Instagram tlačítko */
-        .btn-ig {
-            border-color: #e1306c;
-        }
-        .btn-ig:hover {
-            background: #e1306c;
-            box-shadow: 0 5px 25px rgba(225, 48, 108, 0.4);
-        }
+        .btn-ig { border-color: #e1306c; }
+        .btn-ig:hover { background: #e1306c; box-shadow: 0 5px 25px rgba(225, 48, 108, 0.4); }
 
-        /* Speciální barva pro Email tlačítko */
-        .btn-email {
-            border-color: #00d2ff;
-        }
-        .btn-email:hover {
-            background: #00d2ff;
-            color: #000;
-            box-shadow: 0 5px 25px rgba(0, 210, 255, 0.4);
-        }
+        .btn-email { border-color: #00d2ff; }
+        .btn-email:hover { background: #00d2ff; color: #000; box-shadow: 0 5px 25px rgba(0, 210, 255, 0.4); }
 
         footer {
             padding: 50px;
@@ -227,10 +259,35 @@
             font-size: 0.8rem;
         }
 
+        /* RESPONSIVNÍ DESIGN */
         @media (max-width: 768px) {
             h1 { font-size: 3rem; }
             .tagline { font-size: 1.1rem; letter-spacing: 4px; }
-            nav a { margin: 0 8px; font-size: 0.7rem; }
+            .about-content { font-size: 1.1rem; }
+            
+            /* Mobilní menu styl */
+            .hamburger { display: block; }
+            .nav-links {
+                position: absolute;
+                top: 60px; /* pod navbar */
+                left: -100%; /* schováno vlevo */
+                flex-direction: column;
+                background: rgba(2, 2, 4, 0.98);
+                width: 100%;
+                text-align: center;
+                transition: 0.4s ease;
+                padding: 20px 0;
+                border-bottom: 1px solid var(--neon-blue);
+            }
+            .nav-links.active {
+                left: 0; /* vyjede na obrazovku */
+            }
+            .nav-links a {
+                display: block;
+                margin: 15px 0;
+                font-size: 1.2rem;
+            }
+            
             .links-container { flex-direction: column; align-items: stretch; max-width: 300px; margin: 0 auto; }
         }
     </style>
@@ -239,19 +296,26 @@
 
     <div class="page-wrapper">
         <nav>
-            <a href="#domu">Domů</a>
-            <a href="#novinky">Novinky</a>
-            <a href="#o-nas">O týmu</a>
-            <a href="#zapasy">Zápasy</a>
-            <a href="#soupiska">Soupiska</a>
+            <div class="nav-links">
+                <a href="#domu" class="active">Domů</a>
+                <a href="#novinky">Novinky</a>
+                <a href="#o-nas">O týmu</a>
+                <a href="#zapasy">Zápasy</a>
+                <a href="#soupiska">Soupiska</a>
+            </div>
+            <button class="hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </nav>
 
-        <header id="domu">
+        <header id="domu" class="fade-in">
             <h1>Sokol Vyšehrad</h1>
             <p class="tagline">Basketball U17</p>
         </header>
 
-        <section id="novinky">
+        <section id="novinky" class="fade-in">
             <h2>Novinky</h2>
             <div class="coming-soon-box">
                 <span class="status-badge">Již brzy</span>
@@ -259,7 +323,7 @@
             </div>
         </section>
 
-        <section id="o-nas">
+        <section id="o-nas" class="fade-in">
             <h2>O našem týmu</h2>
             <div class="about-content">
                 Jsme mládežnický basketbalový tým TJ Sokol Vyšehrad U17. Soustředíme se na tvrdý trénink, rozvoj individuálních dovedností i týmové chemie. Připravujeme se na to, abychom v nadcházející sezóně předvedli ty nejlepší výkony. Sledujte naši cestu!
@@ -272,7 +336,7 @@
             </div>
         </section>
 
-        <section id="zapasy">
+        <section id="zapasy" class="fade-in">
             <h2>Nadcházející zápasy</h2>
             <div class="coming-soon-box">
                 <span class="status-badge">Již brzy</span>
@@ -280,7 +344,7 @@
             </div>
         </section>
 
-        <section id="soupiska">
+        <section id="soupiska" class="fade-in">
             <h2>Soupiska</h2>
             <div class="coming-soon-box">
                 <span class="status-badge">Již brzy</span>
@@ -293,5 +357,65 @@
         </footer>
     </div>
 
+    <script>
+        // 1. OVLÁDÁNÍ MOBILNÍHO MENU
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        const links = document.querySelectorAll('.nav-links a');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Zavřít menu po kliknutí na odkaz (na mobilech)
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // 2. ANIMACE OBJEVOVÁNÍ PŘI SKROLOVÁNÍ (Scroll Reveal)
+        const faders = document.querySelectorAll('.fade-in');
+        const appearOptions = {
+            threshold: 0.15, // Efekt spustí, jakmile je 15% elementu vidět
+            rootMargin: "0px 0px -50px 0px" // Spustí to kousek nad spodním okrajem obrazovky
+        };
+
+        const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target); // Objeví se jen poprvé, pak už zůstane
+            });
+        }, appearOptions);
+
+        faders.forEach(fader => {
+            appearOnScroll.observe(fader);
+        });
+
+        // 3. AKTIVNÍ ZVÝRAZNĚNÍ V MENU PODLE SCROLLOVÁNÍ
+        const sections = document.querySelectorAll('section, header');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                // Pokud uživatel doscrolloval k sekci
+                if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
