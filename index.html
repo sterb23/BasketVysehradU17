@@ -180,16 +180,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .coming-soon-box::after {
-            content: 'SEASON 2026/27';
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            opacity: 0.3;
-        }
-
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.4); }
             70% { box-shadow: 0 0 0 10px rgba(0, 210, 255, 0); }
@@ -251,6 +241,111 @@
         .btn-email { border-color: #00d2ff; }
         .btn-email:hover { background: #00d2ff; color: #000; box-shadow: 0 5px 25px rgba(0, 210, 255, 0.4); }
 
+        /* --- NOVÉ: STYLY PRO ZÁPASY --- */
+        .match-list {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .match-item {
+            background: var(--bg-card);
+            border-left: 4px solid var(--neon-blue);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .match-item:hover {
+            transform: scale(1.02);
+            border-left-color: var(--neon-light);
+        }
+        .match-date {
+            color: var(--neon-light);
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex: 1;
+        }
+        .match-opponent {
+            font-size: 1.2rem;
+            font-weight: 700;
+            flex: 2;
+            text-align: center;
+        }
+        .match-venue {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            flex: 1;
+            text-align: right;
+        }
+        .venue-home { color: #fff; font-weight: 700; }
+        .venue-away { color: #ff4a4a; font-weight: 700; }
+
+        /* --- NOVÉ: STYLY PRO SOUPISKU --- */
+        .roster-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+            text-align: left;
+        }
+        .player-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 68, 255, 0.2);
+            border-radius: 10px;
+            padding: 25px 20px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s ease;
+        }
+        .player-card:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 10px 20px rgba(0, 68, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        .player-number {
+            position: absolute;
+            top: -15px;
+            right: -10px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 6rem;
+            color: rgba(255,255,255,0.02);
+            font-weight: 900;
+            line-height: 1;
+            z-index: 0;
+            transition: color 0.3s ease;
+        }
+        .player-card:hover .player-number {
+            color: rgba(0, 210, 255, 0.08);
+        }
+        .player-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-white);
+            position: relative;
+            z-index: 1;
+        }
+        .player-info {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            position: relative;
+            z-index: 1;
+        }
+        .player-position {
+            color: var(--neon-light);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
         footer {
             padding: 50px;
             text-align: center;
@@ -265,12 +360,12 @@
             .tagline { font-size: 1.1rem; letter-spacing: 4px; }
             .about-content { font-size: 1.1rem; }
             
-            /* Mobilní menu styl */
+            /* Mobilní menu */
             .hamburger { display: block; }
             .nav-links {
                 position: absolute;
-                top: 60px; /* pod navbar */
-                left: -100%; /* schováno vlevo */
+                top: 60px;
+                left: -100%;
                 flex-direction: column;
                 background: rgba(2, 2, 4, 0.98);
                 width: 100%;
@@ -279,16 +374,18 @@
                 padding: 20px 0;
                 border-bottom: 1px solid var(--neon-blue);
             }
-            .nav-links.active {
-                left: 0; /* vyjede na obrazovku */
-            }
-            .nav-links a {
-                display: block;
-                margin: 15px 0;
-                font-size: 1.2rem;
-            }
-            
+            .nav-links.active { left: 0; }
+            .nav-links a { display: block; margin: 15px 0; font-size: 1.2rem; }
             .links-container { flex-direction: column; align-items: stretch; max-width: 300px; margin: 0 auto; }
+
+            /* Mobilní zápasy */
+            .match-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            .match-opponent { text-align: center; }
+            .match-venue { text-align: center; }
         }
     </style>
 </head>
@@ -338,22 +435,85 @@
 
         <section id="zapasy" class="fade-in">
             <h2>Nadcházející zápasy</h2>
-            <div class="coming-soon-box">
-                <span class="status-badge">Již brzy</span>
-                <p>Rozpis zápasů se zde objeví hned, jakmile bude rozlosována nová sezóna.</p>
+            <p style="color: var(--text-gray); margin-bottom: 30px;">*Ukázkový rozpis - bude aktualizováno dle oficiálního losu</p>
+            
+            <div class="match-list">
+                <!-- Zápas 1 -->
+                <div class="match-item">
+                    <div class="match-date">24. 09. 2026 | 18:00</div>
+                    <div class="match-opponent">vs USK Praha</div>
+                    <div class="match-venue"><span class="venue-away">Venku</span> - Hala Folimanka</div>
+                </div>
+
+                <!-- Zápas 2 -->
+                <div class="match-item">
+                    <div class="match-date">01. 10. 2026 | 15:30</div>
+                    <div class="match-opponent">vs Sokol Pražský</div>
+                    <div class="match-venue"><span class="venue-home">Doma</span> - Hala Vyšehrad</div>
+                </div>
+
+                <!-- Zápas 3 -->
+                <div class="match-item">
+                    <div class="match-date">08. 10. 2026 | 10:00</div>
+                    <div class="match-opponent">vs BA Sparta</div>
+                    <div class="match-venue"><span class="venue-home">Doma</span> - Hala Vyšehrad</div>
+                </div>
             </div>
         </section>
 
         <section id="soupiska" class="fade-in">
-            <h2>Soupiska</h2>
-            <div class="coming-soon-box">
-                <span class="status-badge">Již brzy</span>
-                <p>Finální soupiska hráčů bude zveřejněna před prvním ligovým zápasem.</p>
+            <h2>Soupiska 2026/27</h2>
+            <p style="color: var(--text-gray); margin-bottom: 30px;">*Tato soupiska je zatím předběžná šablona</p>
+            
+            <div class="roster-grid">
+                <!-- Hráč 1 -->
+                <div class="player-card">
+                    <div class="player-number">4</div>
+                    <div class="player-name">Jan Novák</div>
+                    <div class="player-info">
+                        <span class="player-position">Rozehrávač (PG)</span>
+                        <span>Výška: 182 cm</span>
+                        <span>Ročník: 2010</span>
+                    </div>
+                </div>
+
+                <!-- Hráč 2 -->
+                <div class="player-card">
+                    <div class="player-number">7</div>
+                    <div class="player-name">Tomáš Dvořák</div>
+                    <div class="player-info">
+                        <span class="player-position">Křídlo (SG/SF)</span>
+                        <span>Výška: 189 cm</span>
+                        <span>Ročník: 2009</span>
+                    </div>
+                </div>
+
+                <!-- Hráč 3 -->
+                <div class="player-card">
+                    <div class="player-number">13</div>
+                    <div class="player-name">David Veselý</div>
+                    <div class="player-info">
+                        <span class="player-position">Pivot (PF/C)</span>
+                        <span>Výška: 198 cm</span>
+                        <span>Ročník: 2009</span>
+                    </div>
+                </div>
+
+                <!-- Hráč 4 -->
+                <div class="player-card">
+                    <div class="player-number">15</div>
+                    <div class="player-name">Martin Horák</div>
+                    <div class="player-info">
+                        <span class="player-position">Pivot (C)</span>
+                        <span>Výška: 202 cm</span>
+                        <span>Ročník: 2010</span>
+                    </div>
+                </div>
             </div>
         </section>
 
         <footer>
-            <p>&copy; 2026 Sokol Vyšehrad U17 | Webové sekce budou plně spuštěny se startem sezóny.</p>
+            <p>&copy; 2026 Sokol Vyšehrad U17 | Tvoříme budoucnost basketbalu.</p>
         </footer>
     </div>
 
@@ -377,15 +537,15 @@
         // 2. ANIMACE OBJEVOVÁNÍ PŘI SKROLOVÁNÍ (Scroll Reveal)
         const faders = document.querySelectorAll('.fade-in');
         const appearOptions = {
-            threshold: 0.15, // Efekt spustí, jakmile je 15% elementu vidět
-            rootMargin: "0px 0px -50px 0px" // Spustí to kousek nad spodním okrajem obrazovky
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
         };
 
         const appearOnScroll = new IntersectionObserver(function(entries, observer) {
             entries.forEach(entry => {
                 if (!entry.isIntersecting) return;
                 entry.target.classList.add('visible');
-                observer.unobserve(entry.target); // Objeví se jen poprvé, pak už zůstane
+                observer.unobserve(entry.target);
             });
         }, appearOptions);
 
@@ -403,7 +563,6 @@
                 const sectionTop = section.offsetTop;
                 const sectionHeight = section.clientHeight;
                 
-                // Pokud uživatel doscrolloval k sekci
                 if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
                     current = section.getAttribute('id');
                 }
