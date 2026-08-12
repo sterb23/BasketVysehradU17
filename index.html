@@ -227,6 +227,7 @@
             transition: 0.3s ease;
             font-size: 0.95rem;
             letter-spacing: 1px;
+            cursor: pointer;
         }
 
         .btn-link:hover {
@@ -242,11 +243,36 @@
         .btn-email:hover { background: #00d2ff; color: #000; box-shadow: 0 5px 25px rgba(0, 210, 255, 0.4); }
 
         /* ZÁPASY */
+        
+        /* Akordeon pro zápasy (plynulé rozevírání přes Grid) */
+        .matches-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.5s ease-out;
+            margin-top: 30px;
+        }
+        
+        .matches-wrapper.expanded {
+            grid-template-rows: 1fr;
+        }
+        
+        .matches-inner {
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.4s ease-out;
+        }
+        
+        .matches-wrapper.expanded .matches-inner {
+            opacity: 1;
+            padding-top: 10px;
+        }
+
         .match-list {
             max-width: 800px;
             margin: 0 auto;
             text-align: left;
         }
+        
         .match-item {
             background: var(--bg-card);
             border-left: 4px solid var(--neon-blue);
@@ -259,28 +285,33 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             transition: transform 0.3s ease, border-color 0.3s ease;
         }
+        
         .match-item:hover {
             transform: scale(1.02);
             border-left-color: var(--neon-light);
         }
+        
         .match-date {
             color: var(--neon-light);
             font-weight: 700;
             font-size: 1.1rem;
             flex: 1;
         }
+        
         .match-opponent {
             font-size: 1.2rem;
             font-weight: 700;
             flex: 2;
             text-align: center;
         }
+        
         .match-venue {
             color: var(--text-gray);
             font-size: 0.9rem;
             flex: 1;
             text-align: right;
         }
+        
         .venue-home { color: #fff; font-weight: 700; }
         .venue-away { color: #ff4a4a; font-weight: 700; }
 
@@ -435,28 +466,43 @@
 
         <section id="zapasy" class="fade-in">
             <h2>Nadcházející zápasy</h2>
-            <p style="color: var(--text-gray); margin-bottom: 30px;">*Rozpis zápasů bude doplněn po oficiálním losování soutěže.</p>
+            <p style="color: var(--text-gray); margin-bottom: 20px;">*Rozpis zápasů bude doplněn po oficiálním losování soutěže.</p>
             
-            <div class="match-list">
-                <!-- Zápas 1 -->
-                <div class="match-item">
-                    <div class="match-date">03. 10. 2026 | --:--</div>
-                    <div class="match-opponent">Sokol Vyšehrad vs BK RJ EBC Mělník</div>
-                    <div class="match-venue"><span class="venue-home">Doma</span> - [Místo bude doplněno]</div>
-                </div>
+            <!-- Tlačítko pro zobrazení/skrytí zápasů -->
+            <button id="toggleMatchesBtn" class="btn-link">Zobrazit rozpis utkání</button>
+            
+            <!-- Kontejner se zápasy -->
+            <div id="matchesWrapper" class="matches-wrapper">
+                <div class="matches-inner">
+                    <div class="match-list">
+                        <!-- Zápas 1 -->
+                        <div class="match-item">
+                            <div class="match-date">03. 10. 2026 | --:--</div>
+                            <div class="match-opponent">Sokol Vyšehrad vs BK RJ EBC Mělník</div>
+                            <div class="match-venue"><span class="venue-home">Doma</span> - [Místo bude doplněno]</div>
+                        </div>
 
-                <!-- Zápas 2 -->
-                <div class="match-item">
-                    <div class="match-date">04. 10. 2026 | --:--</div>
-                    <div class="match-opponent">Sokol Vyšehrad vs BK Kralupy</div>
-                    <div class="match-venue"><span class="venue-home">Doma</span> - [Místo bude doplněno]</div>
-                </div>
+                        <!-- Zápas 2 -->
+                        <div class="match-item">
+                            <div class="match-date">04. 10. 2026 | --:--</div>
+                            <div class="match-opponent">Sokol Vyšehrad vs BK Kralupy</div>
+                            <div class="match-venue"><span class="venue-home">Doma</span> - [Místo bude doplněno]</div>
+                        </div>
 
-                <!-- Zápas 3 -->
-                <div class="match-item">
-                    <div class="match-date">17. 10. 2026 | --:--</div>
-                    <div class="match-opponent">BK Beroun vs Sokol Vyšehrad</div>
-                    <div class="match-venue"><span class="venue-away">Venku</span> - [Místo bude doplněno]</div>
+                        <!-- Zápas 3 -->
+                        <div class="match-item">
+                            <div class="match-date">17. 10. 2026 | --:--</div>
+                            <div class="match-opponent">BK Beroun vs Sokol Vyšehrad</div>
+                            <div class="match-venue"><span class="venue-away">Venku</span> - [Místo bude doplněno]</div>
+                        </div>
+
+                        <!-- Zápas 4 -->
+                        <div class="match-item">
+                            <div class="match-date">18. 10. 2026 | --:--</div>
+                            <div class="match-opponent">BK Beroun vs Sokol Vyšehrad</div>
+                            <div class="match-venue"><span class="venue-away">Venku</span> - [Místo bude doplněno]</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -534,7 +580,22 @@
             });
         });
 
-        // 2. ANIMACE OBJEVOVÁNÍ PŘI SKROLOVÁNÍ (Scroll Reveal)
+        // 2. ROZBALOVÁNÍ ZÁPASŮ (AKORDEON)
+        const toggleMatchesBtn = document.getElementById('toggleMatchesBtn');
+        const matchesWrapper = document.getElementById('matchesWrapper');
+
+        toggleMatchesBtn.addEventListener('click', () => {
+            matchesWrapper.classList.toggle('expanded');
+            
+            // Změna textu tlačítka
+            if (matchesWrapper.classList.contains('expanded')) {
+                toggleMatchesBtn.textContent = 'Skrýt rozpis utkání';
+            } else {
+                toggleMatchesBtn.textContent = 'Zobrazit rozpis utkání';
+            }
+        });
+
+        // 3. ANIMACE OBJEVOVÁNÍ PŘI SKROLOVÁNÍ (Scroll Reveal)
         const faders = document.querySelectorAll('.fade-in');
         const appearOptions = {
             threshold: 0.15,
@@ -553,7 +614,7 @@
             appearOnScroll.observe(fader);
         });
 
-        // 3. AKTIVNÍ ZVÝRAZNĚNÍ V MENU PODLE SCROLLOVÁNÍ
+        // 4. AKTIVNÍ ZVÝRAZNĚNÍ V MENU PODLE SCROLLOVÁNÍ
         const sections = document.querySelectorAll('section, header');
         
         window.addEventListener('scroll', () => {
